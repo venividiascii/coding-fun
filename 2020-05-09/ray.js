@@ -1,6 +1,6 @@
 class Ray {
-	constructor (xPos, yPos, angle) {
-		this.pos = createVector(xPos, yPos);
+	constructor (pos, angle) {
+		this.pos = pos;
 		this.dir = p5.Vector.fromAngle(angle);
 	}
 	show(endPt) {

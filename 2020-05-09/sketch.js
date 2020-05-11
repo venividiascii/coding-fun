@@ -6,7 +6,7 @@ let walls = [];
 
 function setup() {
 	createCanvas(WIDTH, HEIGHT);
-	frameRate(3);
+	frameRate(30);
 	for (let i = 0 ; i < 10 ; i += 10){
 		rays.push(new Ray(100, 150, i));
 	}
@@ -27,11 +27,14 @@ function setup() {
 function draw() {
 	background(230);
 	for (const ray of rays) {
-		ray.show();
+		//ray.show();
 		ray.update();
-
 	}
-		rays[0].cast(walls);
+	collision = rays[0].cast(walls[0]);
+	if (collision) {
+		console.table([rays[0].x, rays[0].y, collision.x, collision.y]);
+				rays[0].show(collision);
+	}
 	for (const wall of walls) {
 		wall.show();
 	}

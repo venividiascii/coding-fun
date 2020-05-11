@@ -1,33 +1,42 @@
 class Ray {
 	constructor (xPos, yPos, angle) {
 		this.pos = createVector(xPos, yPos);
-		this.dir = p5.Vector.fromAngle(angle, 1);
+		this.dir = p5.Vector.fromAngle(angle);
 	}
-	show() {
+	show(endPt) {
 		ellipse(this.pos.x, this.pos.y, 10)
 		line(this.pos.x, this.pos.y,
-			this.pos.x + this.dir.x * 20,
-			this.pos.y + this.dir.y * 20)
+			endPt.x,
+			endPt.y)
 	}
 	update() {
 		this.pos = createVector(mouseX, mouseY);
 	}
-	cast(walls) {
-		for (const wall of walls){
-			const v1 = p5.Vector.sub(this.pos, wall.p1);
-			const v2 = wall.dir;
-			const v3 = createVector(this.pos.y, this.pos.x); //optimize by making when initialized
-			
-			let denom = p5.Vector.dot(v2, v3); //optimize: change to inverse and mult
-			console.table([v2, v3, denom]);
-			if (denom == 0) { return; }
-			const crosProd = p5.Vector.mag(p5.Vector.cross(v2, v1));
-			const t1 = crosProd * denom;
-			const t2 = (v1.x * v2.x + v1.y * v2.y) * denom;
+	cast(wall) {
+		const x1 = wall.a.x;
+		const y1 = wall.a.y;
+		const x2 = wall.b.x;
+		const y2 = wall.b.y;
 
-			if (t1 >= 0 && t2 >= 0 && t2 <= 1) {
-				console.log(t2)
-			}
+		const x3 = this.pos.x;
+		const y3 = this.pos.y;
+		const x4 = this.pos.x + this.dir.x;
+		const y4 = this.pos.y + this.dir.y;
+
+		const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+		if (den == 0) {
+			return;
+		}
+
+		const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
+		const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
+		if (t > 0 && t < 1 && u > 0) {
+			const pt = createVector();
+			pt.x = x1 + t * (x2 - x1);
+			pt.y = y1 + t * (y2 - y1);
+			return pt;
+		} else {
+			return;
 		}
 	}
 }

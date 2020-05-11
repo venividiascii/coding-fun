@@ -4,7 +4,9 @@ class Ray {
 		this.dir = p5.Vector.fromAngle(angle);
 	}
 	show(endPt) {
-		ellipse(this.pos.x, this.pos.y, 10)
+		ellipse(this.pos.x, this.pos.y, 5)
+		strokeWeight(10);
+		stroke(255, 30);
 		line(this.pos.x, this.pos.y,
 			endPt.x,
 			endPt.y)

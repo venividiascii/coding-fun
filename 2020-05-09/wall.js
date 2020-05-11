@@ -6,6 +6,7 @@ class Wall {
 		//this.dir = p5.Vector.sub(this.p1, this.p2);
 	}
 	show() {
+		stroke(0);
 		line(this.a.x, this.a.y, this.b.x, this.b.y);
 	}
 }

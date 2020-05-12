@@ -25,21 +25,18 @@ class Board{
 	}
 	legalMoves(){
 		let moveList = [];
-		if (this.emptyPos.x > 0) { moveList.push("RIGHT")}
 		if (this.emptyPos.x < 3) { moveList.push("LEFT") }
+		if (this.emptyPos.x > 0) { moveList.push("RIGHT")}
+		if (this.emptyPos.y < 3) { moveList.push("UP")   }	
 		if (this.emptyPos.y > 0) { moveList.push("DOWN") }
-		if (this.emptyPos.y < 3) { moveList.push("UP")   }		
 		return moveList;
 	}
 	moveTile(moveDir) {
 		if ( this.legalMoves().includes(moveDir) ) {
 			let slideTile = createVector(this.emptyPos.x, this.emptyPos.y);
-			//console.log(slideTile);
 			switch (moveDir) {
 				case "LEFT":
-					console.log(slideTile);
 					slideTile.x += 1;
-					console.log(slideTile);
 					break;
 				case "RIGHT":
 					slideTile.x -= 1;
@@ -51,13 +48,8 @@ class Board{
 					slideTile.y -= 1;
 					break;
 			}
-
-			
 			let tempTile = this.tileArr[slideTile.x][slideTile.y];
-			console.log(slideTile);
-			console.log(this.emptyPos)
 			this.tileArr[slideTile.x][slideTile.y] = this.tileArr[this.emptyPos.x][this.emptyPos.y];
-			console.table(this.tileArr);
 			this.tileArr[this.emptyPos.x][this.emptyPos.y] = tempTile;
 			this.emptyPos = slideTile
 		}
@@ -70,13 +62,19 @@ class Board{
 		let tileSize = width / this.tileArr.length;
 		textAlign(CENTER, CENTER);
 		textSize(tileSize / 2);
-		//Probably need to swap
+		rectMode(CENTER);
 		for (let i = 0 ; i < this.tileArr.length ; i++){
 			for (let j = 0 ; j < this.tileArr[0].length ; j++){
 				if (this.tileArr[i][j] != " ") {
 					fill(180);
-					rect(i*tileSize, j*tileSize, tileSize, tileSize);
+					stroke(90);
+					strokeWeight(10);
+					rect(i*tileSize + tileSize/2, j*tileSize + tileSize/2, 
+						tileSize-20,tileSize-20);
+					
 					fill(30);
+					stroke(200);
+					strokeWeight(10);
 					text(this.tileArr[i][j], 
 					i*tileSize + tileSize/2, j*tileSize + tileSize/2);
 				}

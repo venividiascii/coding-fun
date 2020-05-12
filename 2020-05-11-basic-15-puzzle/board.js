@@ -1,12 +1,20 @@
 class Board{
 	constructor(){
-		this.tileList = this.shuffleBoard();
+		this.tileList = this.createBoard();
 		this.tileArr = [];
 		this.tileArr.push(this.tileList.slice(0, 4 ))
 		this.tileArr.push(this.tileList.slice(4, 8 ))
 		this.tileArr.push(this.tileList.slice(8, 12))
 		this.tileArr.push(this.tileList.slice(12,16))
 		this.emptyPos = createVector(3, 3)
+	}
+	createBoard(){
+		while (true) {
+			let candidateBoard = this.shuffleBoard();
+			if (this.isSolvable(candidateBoard)){
+				return candidateBoard;
+			}
+		}
 	}
 	shuffleBoard(){
 		let list = [
@@ -22,6 +30,20 @@ class Board{
 		}
 		list.push(" ");
 		return list;
+	}
+	isSolvable(list) {
+		let inversions = 0;
+		for (let i = 0 ; i < list.length ; i++) {
+			let a = list[i];
+			for (let j = i ; j < list.length ; j++) {
+				let b = list[j];
+				if (a < b) {inversions++;}
+			} 
+		}
+		if (inversions % 2 == 1)
+			return true;
+		else
+			return false;
 	}
 	legalMoves(){
 		let moveList = [];
@@ -54,10 +76,7 @@ class Board{
 			this.emptyPos = slideTile
 		}
 	}
-	swapTile(swap) {
-		temp = a;
-		a = b
-	}
+
 	draw(){
 		let tileSize = width / this.tileArr.length;
 		textAlign(CENTER, CENTER);

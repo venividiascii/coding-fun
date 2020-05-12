@@ -7,6 +7,8 @@ class Board{
 		this.tileArr.push(this.tileList.slice(8, 12))
 		this.tileArr.push(this.tileList.slice(12,16))
 		this.emptyPos = createVector(3, 3)
+		
+		this.won = false;
 	}
 	createBoard(){
 		while (true) {
@@ -54,6 +56,7 @@ class Board{
 		return moveList;
 	}
 	moveTile(moveDir) {
+		if (this.won) {return}
 		if ( this.legalMoves().includes(moveDir) ) {
 			let slideTile = createVector(this.emptyPos.x, this.emptyPos.y);
 			switch (moveDir) {
@@ -98,6 +101,54 @@ class Board{
 					i*tileSize + tileSize/2, j*tileSize + tileSize/2);
 				}
 			}
+		}
+	}
+	checkWin(){
+		let masterList = [
+			"1",  "2",  "3",  "4",  
+			"5",  "6",  "7",  "8",
+			"9",  "10", "11", "12", 
+			"13", "14", "15", " "];
+		let flatList = [];
+		
+
+
+		for (let i = 0 ; i < this.tileArr.length ; i++){
+			for (let j = 0 ; j < this.tileArr[0].length ; j++){
+				flatList.push( this.tileArr[j][i] )
+			}
+		}
+		for (let i = 0 ; i < masterList.length ; i++) {
+			if (masterList[i] != flatList[i]) { 
+				return 
+			}
+		} 
+		this.win()
+	}
+	win() {
+		this.won = true;
+		
+		textAlign(CENTER, CENTER);
+		textSize(height / 5);
+		fill(0);
+		stroke(240);
+		strokeWeight(10);
+		
+		text("You win!", width / 2, height / 2.2);
+		textSize(height / 13);
+		text("Press space to restart", width / 2, height / 1.7);	
+	}
+	reset(){
+		if (this.won){
+			this.won = false;
+			// Duplicate code
+			this.tileList = this.createBoard();	
+			this.tileArr = [];
+			this.tileArr.push(this.tileList.slice(0, 4 ))
+			this.tileArr.push(this.tileList.slice(4, 8 ))
+			this.tileArr.push(this.tileList.slice(8, 12))
+			this.tileArr.push(this.tileList.slice(12,16))
+			this.emptyPos = createVector(3, 3)
 		}
 	}
 }

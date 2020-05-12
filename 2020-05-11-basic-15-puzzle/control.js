@@ -13,4 +13,7 @@ function keyPressed() {
 			board.moveTile("DOWN");
 			break;
 	}
+	if (keyCode == 32) {
+		board.reset();
+	}
 }

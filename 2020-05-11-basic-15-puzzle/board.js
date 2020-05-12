@@ -1,29 +1,30 @@
 class Board{
 	constructor(){
-		this.tileList = this.createBoard();
-		this.tileArr = [];
-		this.tileArr.push(this.tileList.slice(0, 4 ))
-		this.tileArr.push(this.tileList.slice(4, 8 ))
-		this.tileArr.push(this.tileList.slice(8, 12))
-		this.tileArr.push(this.tileList.slice(12,16))
-		this.emptyPos = createVector(3, 3)
-		
+		this.tileArr = this.createBoard();
+		this.emptyPos = createVector(3, 3);
 		this.won = false;
 	}
 	createBoard(){
+		let candidateBoard;
 		while (true) {
-			let candidateBoard = this.shuffleBoard();
-			if (this.isSolvable(candidateBoard)){
-				return candidateBoard;
+			candidateBoard = this.shuffleBoard();
+			if (this.isSolvable(candidateBoard)) {
+				break 
 			}
 		}
+		
+		let finalBoard = [];
+		finalBoard.push(candidateBoard.slice(0, 4 ));
+		finalBoard.push(candidateBoard.slice(4, 8 ));
+		finalBoard.push(candidateBoard.slice(8, 12));
+		finalBoard.push(candidateBoard.slice(12,16));
+		return finalBoard;
 	}
 	shuffleBoard(){
-		let list = [
-			"1",  "2",  "3",  "4",  
-			"5",  "6",  "7",  "8",
-			"9",  "10", "11", "12", 
-			"13", "14", "15"] 
+		let list = ["1",  "2",  "3",  "4",  
+					      "5",  "6",  "7",  "8",
+                "9",  "10", "11", "12", 
+                "13", "14", "15"];
 		for (let i = 0 ; i < list.length ; i++) {
 			let randIndex = floor(random(list.length - i));
 			let temp = list[randIndex];
@@ -42,10 +43,12 @@ class Board{
 				if (a < b) {inversions++;}
 			} 
 		}
-		if (inversions % 2 == 1)
+		if (inversions % 2 == 1){
 			return true;
-		else
+		}
+		else {
 			return false;
+		}
 	}
 	legalMoves(){
 		let moveList = [];
@@ -76,7 +79,7 @@ class Board{
 			let tempTile = this.tileArr[slideTile.x][slideTile.y];
 			this.tileArr[slideTile.x][slideTile.y] = this.tileArr[this.emptyPos.x][this.emptyPos.y];
 			this.tileArr[this.emptyPos.x][this.emptyPos.y] = tempTile;
-			this.emptyPos = slideTile
+			this.emptyPos = slideTile;
 		}
 	}
 
@@ -104,26 +107,22 @@ class Board{
 		}
 	}
 	checkWin(){
-		let masterList = [
-			"1",  "2",  "3",  "4",  
-			"5",  "6",  "7",  "8",
-			"9",  "10", "11", "12", 
-			"13", "14", "15", " "];
+		let masterList = ["1",  "2",  "3",  "4",  
+                      "5",  "6",  "7",  "8",
+                      "9",  "10", "11", "12", 
+                      "13", "14", "15", " "];
 		let flatList = [];
-		
-
-
 		for (let i = 0 ; i < this.tileArr.length ; i++){
 			for (let j = 0 ; j < this.tileArr[0].length ; j++){
-				flatList.push( this.tileArr[j][i] )
+				flatList.push(this.tileArr[j][i]);
 			}
 		}
 		for (let i = 0 ; i < masterList.length ; i++) {
 			if (masterList[i] != flatList[i]) { 
-				return 
+				return;
 			}
 		} 
-		this.win()
+		this.win();
 	}
 	win() {
 		this.won = true;
@@ -141,14 +140,7 @@ class Board{
 	reset(){
 		if (this.won){
 			this.won = false;
-			// Duplicate code
-			this.tileList = this.createBoard();	
-			this.tileArr = [];
-			this.tileArr.push(this.tileList.slice(0, 4 ))
-			this.tileArr.push(this.tileList.slice(4, 8 ))
-			this.tileArr.push(this.tileList.slice(8, 12))
-			this.tileArr.push(this.tileList.slice(12,16))
-			this.emptyPos = createVector(3, 3)
+			this.tileArr = this.createBoard();
 		}
 	}
 }

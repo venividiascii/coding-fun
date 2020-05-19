@@ -5,7 +5,7 @@ function setup() {
   createCanvas(WIDTH, HEIGHT);
   pixelDensity(1)
   noLoop
-}
+} 
 
 function draw() {
   background(30);

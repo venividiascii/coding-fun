@@ -16,7 +16,7 @@ Projects that I may or may not code in the future.
 -- animated julia set fractal viewer. Loops with perlin noise? Full screen 1080p
 
 Another idea list that I found from 20
--Collision with random number of balls
+- Collision with random number of balls
 -Card game: War
 -Dice War, Risk-style with 5 dice
 -Saving to an external file

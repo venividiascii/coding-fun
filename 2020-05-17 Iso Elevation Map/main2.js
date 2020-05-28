@@ -1,56 +1,49 @@
-'use strict'
-const WIDTH = 600;
+const WIDTH = 800;
 const HEIGHT = 600;
 
-const tileW = 100;
-const tileH = 50
-
-// figure out how to render a single tile based on height maps
+const tileW = 40;
+const tileH = 20
+const gridSize = 20
 
 //  1 __ 2      1 
 //   |  |      /\ 2
 //   |__|    4 \/
 //  4    3     3
 
-//const tileArr = [
-//  [26, 30, 20],
-//  [1, 1, 8],
-//  [4, 3, 7]
-//]
-
-const tileArr = [
-  [-20, -20, -20, -20, -20],
-  [1, 1, 1, 1, -10],
-  [1, 9, 1, 1, 30],
-  [10, 50, 60, 80, 80],
-  [15, 50, 60, 80, 80]
-]
-
+let tileArr = []
 let tileMap;
 
 function setup() {
   createCanvas(WIDTH, HEIGHT);
-  tileMap = subSquares(tileArr);
-  //console.table(tileMap)
+  noiseDetail(6)
+  for (let i = 0; i < gridSize; i++) {
+    tileArr.push([])
+    for (let j = 0; j < gridSize; j++) {
+      let k = millis() /1000;
+      tileArr[i].push(0)
+    }
+  }
 }
 
 function draw() {
-  //background(30);
-
-  //renderTile(tileArr, 1, 2);
-  //let i = 0;
-
+  background(120, 120, 190);
+  for (let i = 0; i < tileArr.length; i++) {
+    for (let j = 0; j < tileArr[0].length; j++) {
+      let k = millis() /12000;
+      tileArr[j][i] = int(noise(j/15, i/15, k)*400)
+    }
+  }
+  tileMap = subSquares(tileArr);
   for (let i = 0; i < tileMap.length; i++) {
     for (let j = 0; j < tileMap[0].length; j++) {
-      console.table(tileMap[i][j])
       renderTile(tileMap[j][i], i, j)
     }
   }
-  noLoop()
 }
 
-// takes a large 2D array, and returns an array
-// where each tile is a flattened list of the array
+
+// takes a large 2D array, and returns each tile as
+// a set of 4 points in the form [a, b, c, d]
 function subSquares(tileMap) {
   let tileArray = []
   for (let i = 0; i < tileMap.length - 1; i++) {
@@ -68,18 +61,22 @@ function subSquares(tileMap) {
   return tileArray;
 }
 
+
 function renderTile(tile, xPos, yPos) {
   //transform points
-  //if (yPos % 2 == 1) {xPos += .5}
-  let tilePosX = 100 + (tileW/2) * xPos + tileW * yPos / 2;
-  let tilePosY = 200 + tileH * yPos/2 - (tileH/2) * xPos;
-  console.table(tile)
+  let tilePosX = 20 + (tileW/2) * xPos + tileW * yPos / 2;
+  let tilePosY = 120 + tileH * yPos/2 - (tileH/2) * xPos;
+
   let p4 = tile[0]
   let p3 = tile[1]
   let p2 = tile[2]
   let p1 = tile[3]
 
-  //level square case
+  fill(
+    sin((p1-p2)/30)*255+50, 
+    sin((p2-p3)/30)*255+50, 
+    sin((p3-p4)/30)*255+50
+  )
 
   beginShape();
   vertex(tilePosX + tileW / 2,
@@ -91,9 +88,4 @@ function renderTile(tile, xPos, yPos) {
   vertex(tilePosX + 0,
     p4 + tilePosY + tileH / 2)
   endShape(CLOSE);
-
-  //tilted square case
-
-
-  //folder square
 }
